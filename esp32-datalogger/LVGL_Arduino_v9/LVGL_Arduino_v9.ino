@@ -12,7 +12,7 @@
  *as the examples and demos are now part of the main LVGL library. */
 
 // #include <examples/lv_examples.h>
-// #include <demos/lv_demos.h>
+#include <demos/lv_demos.h>
 
 // #define DIRECT_MODE // Uncomment to enable full frame buffer
 
@@ -63,6 +63,8 @@ Arduino_GFX *gfx = new Arduino_ST7789(bus, PIN_RST /* RST */, 1 /* rotation */, 
 /*******************************************************************************
  * End of Arduino_GFX setting
  ******************************************************************************/
+
+static lv_obj_t * label;
 
 /*******************************************************************************
  * Please config the touch panel in touch.h
@@ -214,7 +216,7 @@ void setup()
     /* Option 1: Create a simple label
      * ---------------------
      */
-    lv_obj_t *label = lv_label_create(lv_scr_act());
+    label = lv_label_create(lv_scr_act());
     lv_label_set_text(label, "Hello Arduino, I'm LVGL!(V" GFX_STR(LVGL_VERSION_MAJOR) "." GFX_STR(LVGL_VERSION_MINOR) "." GFX_STR(LVGL_VERSION_PATCH) ")");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 
@@ -238,8 +240,11 @@ void setup()
   Serial.println("Setup done");
 }
 
+static uint32_t test = 0;
+
 void loop()
 {
+  lv_label_set_text_fmt(label, "%"LV_PRId32, test++);
   lv_task_handler(); /* let the GUI do its work */
 
 #ifdef DIRECT_MODE
